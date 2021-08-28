@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import data from "./data.json";
 import "./bmi.css";
+import BmiTable from "./Table/Table";
 
 const CalculateBMI = () => {
   const [bmi, setBmi] = useState([]);
@@ -9,15 +10,16 @@ const CalculateBMI = () => {
     if (Array.isArray(data) && data.length > 0) {
       data.map((val) => {
         let hSQ = Math.pow(val.HeightCm / 100, 2);
-        let calculatedBMI = val.WeightKg / hSQ;
+        let calculatedBMI = val.Weight / hSQ;
         let bmiVal = Math.round(calculatedBMI * 10) / 10;
         let riskVal = calcRisk(bmiVal);
 
         const data = {
           id: val.id,
-          gender: val.Gender,
-          height: val.HeightCm / 100,
-          weightKg: val.WeightKg,
+          first_name:val.first_name,
+          gender: val.gender,
+          height: val.HeightCm,
+          weightKg: val.Weight,
           bmiValue: calculatedBMI.toFixed(1),
           risk: riskVal,
         };
@@ -39,19 +41,7 @@ const CalculateBMI = () => {
 
   return (
     <div>
-      {Array.isArray(bmi) && bmi.length > 0 ? (
-        <div className="container--BMI">
-          {bmi.map((val) => (
-            <div key={val.id}>
-              <span className="each--span">{val.gender}</span>
-              <span className="each--span">{val.height}</span>
-              <span className="each--span">{val.weightKg}</span>
-              <span className="each--span">{val.bmiValue}</span>
-              <span className="each--span">{val.risk}</span>
-            </div>
-          ))}
-        </div>
-      ) : null}
+      {Array.isArray(bmi)&& bmi.length > 0 && <BmiTable bmi={bmi} />}
     </div>
   );
 };
